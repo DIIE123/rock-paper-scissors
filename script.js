@@ -1,8 +1,35 @@
 let humanScore = 0;
 let computerScore = 0;
 
+// Dom Manipulation
+const playerButtons = document.querySelector("#playerButtons");
+let cooldown = false;
+
+playerButtons.addEventListener("click", (e) => {
+    if (e.target != playerButtons) {
+        if (cooldown) return;
+        cooldown = true;
+
+        const humanChoice = e.target.className;
+        const computerChoice = getComputerChoice();
+
+        const humanButton = e.target;
+        const computerButton = document.querySelector("#computerButtons ." + computerChoice);
+
+        animate(humanButton);
+        setTimeout(() => animate(computerButton), 300);
+        setTimeout(() => playRound(humanChoice, computerChoice), 800);
+        setTimeout(() => {
+            deanimate(humanButton);
+            deanimate(computerButton);
+        }, 1900);
+        setTimeout(() => cooldown = false, 2000);
+    }
+});
+
+// Game Logic
 function getComputerChoice() {
-    let choice = Math.floor(Math.random() * 3) + 1;
+    const choice = Math.floor(Math.random() * 3) + 1;
 
     switch(choice) {
         case 1:
@@ -16,48 +43,39 @@ function getComputerChoice() {
     }
 }
 
-function getHumanChoice() {
-    let choice = prompt("Enter Rock, Paper, or Scissors: ");
-    return choice;
-}
-
-function capitalize(str) {
-    return str.at(0).toUpperCase() + str.slice(1).toLowerCase();
-}
-
 function playRound(humanChoice, computerChoice) {
-    if (humanChoice != "") {
-        humanChoice = capitalize(humanChoice);
-        computerChoice = capitalize(computerChoice);
+    const endText = document.querySelector("#endText");
+
+    if (humanChoice == computerChoice) {
+        endText.textContent = "Draw!";
+        endText.style.color = "gold";
     }
-    
-    if (humanChoice != "Rock" && humanChoice != "Scissors" && humanChoice != "Paper") {
-        console.log("Invalid Input!");
+    else if (humanChoice == "rock" && computerChoice == "scissors" || humanChoice == "scissors" && computerChoice == "paper" || humanChoice == "paper" && computerChoice == "rock") {
+        endText.textContent = "You Win!";
+        endText.style.color = "green";
+        humanScore++;
     }
     else {
-        console.log(`You played ${humanChoice}.`);
-        console.log(`The computer played ${computerChoice}.`);
-
-        if (humanChoice == computerChoice) {
-            console.log(`Draw! You both played ${humanChoice}.`);
-        }
-        else if (humanChoice == "Rock" && computerChoice == "Scissors" || humanChoice == "Scissors" && computerChoice == "Paper" || humanChoice == "Paper" && computerChoice == "Rock") {
-            console.log(`You Win! ${humanChoice} beats ${computerChoice}!`);
-            humanScore++;
-        }
-        else {
-            console.log(`You Lose! ${computerChoice} beats ${humanChoice}!`);
-            computerScore++;
-        }
-    } 
-}
-
-function playGame() {
-    for (let i = 1; i <= 5; i++) {
-        console.log(`Round ${i}!`);
-        playRound(getHumanChoice(), getComputerChoice());
-        console.log(`You: ${humanScore}, Computer: ${computerScore}`);
+        endText.textContent = "You Lose!";
+        endText.style.color = "red";
+        computerScore++;
     }
+
+    updateScore();
 }
 
-playGame();
+function updateScore() {
+    const humanScoreDisplay = document.querySelector("#playerScore span");
+    humanScoreDisplay.textContent = humanScore;
+
+    const computerScoreDisplay = document.querySelector("#computerScore span");
+    computerScoreDisplay.textContent = computerScore;
+}
+
+function animate(element) {
+    element.classList.add("animate");
+}
+
+function deanimate(element) {
+    element.classList.remove("animate");
+}
