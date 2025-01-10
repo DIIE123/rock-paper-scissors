@@ -2,6 +2,7 @@ let humanScore = 0;
 let computerScore = 0;
 
 // Dom Manipulation
+const endText = document.querySelector("#endText");
 const playerButtons = document.querySelector("#playerButtons");
 let cooldown = false;
 
@@ -27,6 +28,15 @@ playerButtons.addEventListener("click", (e) => {
     }
 });
 
+const newRoundButton = document.querySelector("#newround");
+
+newRoundButton.addEventListener("click", () => {
+    humanScore = 0;
+    computerScore = 0;
+    updateScore();
+    endText.textContent = "";
+});
+
 // Game Logic
 function getComputerChoice() {
     const choice = Math.floor(Math.random() * 3) + 1;
@@ -44,8 +54,6 @@ function getComputerChoice() {
 }
 
 function playRound(humanChoice, computerChoice) {
-    const endText = document.querySelector("#endText");
-
     if (humanChoice == computerChoice) {
         endText.textContent = "Draw!";
         endText.style.color = "gold";

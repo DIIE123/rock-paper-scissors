@@ -69,3 +69,13 @@ button span {
 .animate:hover {
     background-color: white;
 }
+
+#endText {
+    min-height: 50px;
+}
+
+#newround {
+    font-size: 20px;
+    height: 50px;
+    margin-bottom: 50px;
+}
