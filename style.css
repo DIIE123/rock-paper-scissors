@@ -20,6 +20,10 @@ button {
     margin: 10px;
 }
 
+button:hover {
+    background-color: grey;
+}
+
 button span {
     font-size: 64px;
     pointer-events: none;
@@ -60,4 +64,8 @@ button span {
 
 .animate {
     animation: select 0.8s ease-in-out 0s 2 alternate;
+}
+
+.animate:hover {
+    background-color: white;
 }
